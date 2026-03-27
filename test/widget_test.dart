@@ -8,23 +8,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:knowitall/main.dart';
+import 'package:know_it_all/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('App launches and shows home screen', (WidgetTester tester) async {
+    await tester.pumpWidget(const QuizApp());
+    await tester.pumpAndSettle();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Verify the app title is displayed
+    expect(find.text('KnowItAll'), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    // Verify the quick play button exists
+    expect(find.textContaining('Quick Play'), findsOneWidget);
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Verify categories heading is shown
+    expect(find.text('Categories'), findsOneWidget);
+  });
+
+  testWidgets('Tapping Quick Play navigates to quiz screen', (WidgetTester tester) async {
+    await tester.pumpWidget(const QuizApp());
+    await tester.pumpAndSettle();
+
+    // Tap Quick Play
+    await tester.tap(find.textContaining('Quick Play'));
+    await tester.pumpAndSettle();
+
+    // Should see a question counter like "1/10"
+    expect(find.text('1/10'), findsOneWidget);
   });
 }
